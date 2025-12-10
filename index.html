@@ -2,8 +2,7 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather România</title>
+    <title>Meteo România</title>
     <link rel="stylesheet" href="style.css">
 
     <!-- Leaflet CSS -->
@@ -11,31 +10,17 @@
 </head>
 <body>
 
-<div id="container">
+    <h1>Vremea în România</h1>
 
-    <!-- STÂNGA: SEARCH + VREMEA -->
-    <div id="left-panel">
-        <h2>Vremea în România</h2>
+    <input type="text" id="search" placeholder="Caută un oraș...">
+    <button onclick="searchCity()">Caută</button>
 
-        <input type="text" id="search" placeholder="Caută oraș..." autocomplete="off">
-        <ul id="suggestions"></ul>
-
-        <div id="weather-box">
-            <h3>Detalii meteo</h3>
-            <p id="temp"></p>
-            <p id="wind"></p>
-            <p id="desc"></p>
-        </div>
-    </div>
-
-    <!-- DREAPTA: MAPA -->
     <div id="map"></div>
 
-</div>
+    <div id="weather"></div>
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<script src="script.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
