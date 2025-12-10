@@ -1,1 +1,62 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
 
+#container {
+    display: flex;
+    height: 100vh;
+}
+
+/* STÂNGA */
+#left-panel {
+    width: 35%;
+    min-width: 300px;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+
+#search {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#suggestions {
+    list-style: none;
+    padding: 0;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+}
+
+#suggestions li {
+    padding: 8px;
+    cursor: pointer;
+}
+#suggestions li:hover {
+    background: #eee;
+}
+
+#weather-box {
+    margin-top: 20px;
+}
+
+/* DREAPTA */
+#map {
+    flex: 1;
+}
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+    #container {
+        flex-direction: column;
+    }
+    #left-panel {
+        width: 100%;
+        height: 40%;
+    }
+    #map {
+        height: 60%;
+    }
+}
