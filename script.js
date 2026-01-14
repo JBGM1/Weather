@@ -1,4 +1,4 @@
-const apiKey = '914254454ca488d913232fffe6d35533'; // Inlocuieste cu cheia ta API de la OpenWeatherMap
+const apiKey = '914254454ca488d913232fffe6d35533'; 
 const searchBtn = document.querySelector('#search-btn');
 const cityInput = document.querySelector('#city-input');
 const locateBtn = document.querySelector('#locate-btn');
@@ -9,9 +9,9 @@ async function checkWeather(city) {
         const response = await fetch(
             `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=ro&appid=${apiKey}`
         );
-        
+
         if (!response.ok) throw new Error('Orasul nu a fost gasit');
-        
+
         const data = await response.json();
         updateUI(data);
     } catch (err) {
@@ -40,6 +40,7 @@ function updateUI(data) {
     document.querySelector('#desc').innerHTML = data.weather[0].description;
     document.querySelector('#humidity').innerHTML = data.main.humidity + '%';
     document.querySelector('#wind').innerHTML = data.wind.speed + ' km/h';
+    updateMap(data.name);
 }
 
 // Events
@@ -51,3 +52,11 @@ locateBtn.addEventListener('click', getLocalWeather);
 
 // Pornim cu locatia automata la inceput
 window.onload = getLocalWeather;
+
+// Functia pentru actualizarea hartii
+function updateMap(cityName) {
+    const mapIframe = document.querySelector('#google-map');
+    if (mapIframe) {
+        mapIframe.src = `https://www.google.com/maps?q=${cityName}&output=embed`;
+    }
+}
