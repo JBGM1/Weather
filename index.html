@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="ro">
-<head>
-    <meta charset="UTF-8">
-    <title>Meteo România</title>
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkyCast</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+  </head>
+  <body>
+    <div class="weather-card">
+      <input type="text" id="city-input" placeholder="Cauta orasul..." />
+      <button id="search-btn">Cauta</button>
+      <button id="locate-btn">Locatia Mea</button>
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-</head>
-<body>
+      <div class="info">
+        <h1 id="city-name">--</h1>
+        <p id="desc">Asteptare...</p>
+        <h2 id="temp">--°C</h2>
+        <p>Umiditate: <span id="humidity">--</span></p>
+        <p>Vant: <span id="wind">--</span></p>
+      </div>
+    </div>
 
-    <h1>Vremea în România</h1>
-
-    <input type="text" id="search" placeholder="Caută un oraș...">
-    <button onclick="searchCity()">Caută</button>
-
-    <div id="map"></div>
-
-    <div id="weather"></div>
-
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
