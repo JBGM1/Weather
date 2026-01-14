@@ -1,16 +1,1 @@
-body {
-    font-family: Arial;
-    text-align: center;
-}
 
-#map {
-    height: 400px;
-    width: 90%;
-    margin: 20px auto;
-    border-radius: 10px;
-}
-
-#weather {
-    margin-top: 20px;
-    font-size: 20px;
-}
