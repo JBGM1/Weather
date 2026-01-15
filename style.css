@@ -1,8 +1,6 @@
-
-/* Stiluri pentru search container și sugestii */
+/* Stiluri pentru logica sugestiilor - fara design */
 .search-container {
     position: relative;
-    margin-bottom: 20px;
 }
 
 .suggestions {
@@ -10,9 +8,6 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     margin-top: 5px;
     max-height: 200px;
     overflow-y: auto;
@@ -25,19 +20,14 @@
 }
 
 .suggestion-item {
-    padding: 12px 15px;
     cursor: pointer;
-    transition: background 0.2s;
-    border-bottom: 1px solid #f0f0f0;
 }
 
-.suggestion-item:last-child {
-    border-bottom: none;
-    border-radius: 0 0 10px 10px;
-}
-
-.suggestion-item:hover {
-    background: #f5f5f5;
+/* Stiluri pentru buton disabled */
+button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Stiluri pentru hartă */
