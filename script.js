@@ -136,6 +136,12 @@ function filterCities(input) {
 // Event pentru input - sugestii
 cityInput.addEventListener('input', (e) => {
     filterCities(e.target.value);
+    
+    // Reactiveaza butonul cand scrii din nou
+    if (e.target.value) {
+        searchBtn.disabled = false;
+        searchBtn.classList.remove('disabled');
+    }
 });
 
 // Event pentru click pe sugestie
@@ -145,6 +151,10 @@ suggestionsDiv.addEventListener('click', (e) => {
         suggestionsDiv.innerHTML = '';
         suggestionsDiv.classList.remove('active');
         checkWeather(e.target.textContent);
+        
+        // Dezactiveaza butonul cauta
+        searchBtn.disabled = true;
+        searchBtn.classList.add('disabled');
     }
 });
 
