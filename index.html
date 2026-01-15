@@ -9,7 +9,11 @@
   </head>
   <body>
     <div class="weather-card">
-      <input type="text" id="city-input" placeholder="Cauta orasul..." />
+      <div class="search-container">
+        <input type="text" id="city-input" placeholder="Cauta orasul..." autocomplete="off" />
+        <div id="suggestions" class="suggestions"></div>
+      </div>
+      
       <button id="search-btn">Cauta</button>
       <button id="locate-btn">Locatia Mea</button>
 
