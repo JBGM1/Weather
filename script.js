@@ -99,15 +99,27 @@ function updateMap(lat, lon, cityName) {
 function filterCities(input) {
     const searchTerm = input.toLowerCase().trim();
     
-    if (searchTerm.length < 2) {
+    if (searchTerm.length < 1) {
         suggestionsDiv.innerHTML = '';
         suggestionsDiv.classList.remove('active');
         return;
     }
     
-    const matches = romanianCities.filter(city => 
-        city.toLowerCase().startsWith(searchTerm)
-    );
+    // Normalizare pentru caractere romanesti
+    const normalize = (str) => str.toLowerCase()
+        .replace(/ă/g, 'a')
+        .replace(/â/g, 'a')
+        .replace(/î/g, 'i')
+        .replace(/ș/g, 's')
+        .replace(/ț/g, 't');
+    
+    const normalizedSearch = normalize(searchTerm);
+    
+    const matches = romanianCities.filter(city => {
+        const normalizedCity = normalize(city);
+        return normalizedCity.startsWith(normalizedSearch) || 
+               city.toLowerCase().startsWith(searchTerm);
+    });
     
     if (matches.length > 0) {
         suggestionsDiv.innerHTML = matches
