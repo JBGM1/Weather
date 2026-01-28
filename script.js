@@ -1,129 +1,70 @@
-:root {
-  --bg: linear-gradient(135deg, #74ebd5, #9face6);
-  --card: #ffffff;
-  --text: #222;
-  --btn: #6c63ff;
+  const apiKey = '914254454ca488d913232fffe6d35533';
+
+const searchBtn = document.querySelector('#search-btn');
+const cityInput = document.querySelector('#city-input');
+const locateBtn = document.querySelector('#locate-btn');
+const suggestionsDiv = document.querySelector('#suggestions');
+const themeToggle = document.querySelector('#theme-toggle');
+
+const cities = ['București','Cluj-Napoca','Iași','Timișoara','Brașov','Constanța'];
+
+async function checkWeather(city) {
+  const res = await fetch(
+    ⁠ https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=ro&appid=${apiKey} ⁠
+  );
+  const data = await res.json();
+  updateUI(data);
 }
 
-body.dark {
-  --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  --card: #1e293b;
-  --text: #f1f5f9;
-  --btn: #38bdf8;
+function updateUI(data) {
+  document.querySelector('#city-name').textContent = data.name;
+  document.querySelector('#temp').textContent = Math.round(data.main.temp) + '°C';
+  document.querySelector('#desc').textContent = data.weather[0].description;
+  document.querySelector('#humidity').textContent = data.main.humidity + '%';
+  document.querySelector('#wind').textContent = data.wind.speed + ' km/h';
+
+  document.querySelector('#weather-icon').src =
+    ⁠ https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png ⁠;
+
+  document.querySelector('#google-map').src =
+    ⁠ https://www.google.com/maps?q=${data.coord.lat},${data.coord.lon}&output=embed ⁠;
 }
 
-•⁠  ⁠{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: system-ui;
-}
+cityInput.addEventListener('input', () => {
+  const value = cityInput.value.toLowerCase();
+  const matches = cities.filter(c => c.toLowerCase().startsWith(value));
 
-body {
-  min-height: 100vh;
-  background: var(--bg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--text);
-}
+  suggestionsDiv.innerHTML = matches
+    .map(c => ⁠ <div class="suggestion-item">${c}</div> ⁠)
+    .join('');
 
-.weather-card {
-  width: 360px;
-  background: var(--card);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.25);
-  position: relative;
-}
+  suggestionsDiv.classList.toggle('active', matches.length > 0);
+});
 
-#theme-toggle {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
+suggestionsDiv.addEventListener('click', e => {
+  if (e.target.classList.contains('suggestion-item')) {
+    cityInput.value = e.target.textContent;
+    suggestionsDiv.classList.remove('active');
+    checkWeather(e.target.textContent);
+  }
+});
 
-.search-container {
-  position: relative;
-  margin-bottom: 15px;
-}
+searchBtn.addEventListener('click', () => {
+  if (cityInput.value) checkWeather(cityInput.value);
+});
 
-#city-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-}
+locateBtn.addEventListener('click', () => {
+  navigator.geolocation.getCurrentPosition(pos => {
+    fetch(
+      ⁠ https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&units=metric&lang=ro&appid=${apiKey} ⁠
+    )
+      .then(r => r.json())
+      .then(updateUI);
+  });
+});
 
-.suggestions {
-  position: absolute;
-  width: 100%;
-  background: var(--card);
-  margin-top: 5px;
-  border-radius: 10px;
-  display: none;
-}
-
-.suggestions.active {
-  display: block;
-}
-
-.suggestion-item {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.suggestion-item:hover {
-  background: rgba(0,0,0,.1);
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-button {
-  flex: 1;
-  padding: 10px;
-  background: var(--btn);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.info {
-  text-align: center;
-}
-
-.weather-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-#weather-icon {
-  width: 60px;
-}
-
-#temp {
-  font-size: 36px;
-}
-
-#map-container {
-  margin-top: 15px;
-  border-radius: 15px;
-  overflow: hidden;
-}
-
-#google-map {
-  width: 100%;
-  height: 220px;
-  border: 0;
-}
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  themeToggle.textContent =
+    document.body.classList.contains('dark') ? '☀️' : '🌙';
+});
