@@ -1,190 +1,129 @@
-const apiKey = '914254454ca488d913232fffe6d35533'; 
-const searchBtn = document.querySelector('#search-btn');
-const cityInput = document.querySelector('#city-input');
-const locateBtn = document.querySelector('#locate-btn');
-const suggestionsDiv = document.querySelector('#suggestions');
-
-// Lista de orase din Romania pentru sugestii
-const romanianCities = [
-    'Iași', 'Ilfov', 'București', 'Cluj-Napoca', 'Timișoara', 'Constanța',
-    'Craiova', 'Brașov', 'Galați', 'Ploiești', 'Oradea', 'Brăila',
-    'Arad', 'Pitești', 'Sibiu', 'Bacău', 'Târgu Mureș', 'Baia Mare',
-    'Buzău', 'Botoșani', 'Satu Mare', 'Râmnicu Vâlcea', 'Suceava',
-    'Piatra Neamț', 'Drobeta-Turnu Severin', 'Focșani', 'Târgoviște',
-    'Tulcea', 'Târgu Jiu', 'Bistrița', 'Slatina', 'Călărași', 'Reșița',
-    'Alba Iulia', 'Deva', 'Hunedoara', 'Zalău', 'Sfântu Gheorghe',
-    'Giurgiu', 'Slobozia', 'Vaslui', 'Roman', 'Turda', 'Mediaș',
-    'Alexandria', 'Voluntari', 'Lugoj', 'Medgidia', 'Onești', 'Miercurea Ciuc'
-];
-
-// Functia principala care aduce datele
-async function checkWeather(city) {
-    try {
-        const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=ro&appid=${apiKey}`
-        );
-
-        if (!response.ok) throw new Error('Orașul nu a fost găsit');
-
-        const data = await response.json();
-        updateUI(data);
-    } catch (err) {
-        alert(err.message);
-    }
+:root {
+  --bg: linear-gradient(135deg, #74ebd5, #9face6);
+  --card: #ffffff;
+  --text: #222;
+  --btn: #6c63ff;
 }
 
-// Logic pentru auto-locate cu error handling imbunatatit
-function getLocalWeather() {
-    if (!navigator.geolocation) {
-        alert('Geolocation nu este suportat de browser-ul tău');
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-            const { latitude, longitude } = pos.coords;
-            try {
-                const res = await fetch(
-                    `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=ro&appid=${apiKey}`
-                );
-                
-                if (!res.ok) throw new Error('Nu s-au putut obține datele meteo');
-                
-                const data = await res.json();
-                updateUI(data);
-            } catch (err) {
-                alert('Eroare la obținerea vremii: ' + err.message);
-            }
-        },
-        (error) => {
-            let errorMsg = 'Nu s-a putut obține locația ta';
-            
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    errorMsg = 'Acces la locație refuzat. Te rog activează permisiunea de locație.';
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorMsg = 'Informația despre locație nu este disponibilă.';
-                    break;
-                case error.TIMEOUT:
-                    errorMsg = 'Cererea de locație a expirat.';
-                    break;
-            }
-            
-            alert(errorMsg);
-        }
-    );
+body.dark {
+  --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --btn: #38bdf8;
 }
 
-// Aici trimitem datele catre front-end
-function updateUI(data) {
-    document.querySelector('#city-name').innerHTML = data.name;
-    document.querySelector('#temp').innerHTML = Math.round(data.main.temp) + '°C';
-    document.querySelector('#desc').innerHTML = data.weather[0].description;
-    document.querySelector('#humidity').innerHTML = data.main.humidity + '%';
-    document.querySelector('#wind').innerHTML = data.wind.speed + ' km/h';
-    updateMap(data.coord.lat, data.coord.lon, data.name);
+•⁠  ⁠{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui;
 }
 
-// Functia pentru actualizarea hartii cu marker rosu
-function updateMap(lat, lon, cityName) {
-    const mapIframe = document.querySelector('#google-map');
-    if (mapIframe) {
-        // Folosim Google Maps Embed cu marker
-        mapIframe.src = `https://www.google.com/maps?q=${lat},${lon}&output=embed&z=12`;
-    }
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text);
 }
 
-// Functie pentru filtrarea sugestiilor
-function filterCities(input) {
-    const searchTerm = input.toLowerCase().trim();
-    
-    if (searchTerm.length < 1) {
-        suggestionsDiv.innerHTML = '';
-        suggestionsDiv.classList.remove('active');
-        return;
-    }
-    
-    // Normalizare pentru caractere romanesti
-    const normalize = (str) => str.toLowerCase()
-        .replace(/ă/g, 'a')
-        .replace(/â/g, 'a')
-        .replace(/î/g, 'i')
-        .replace(/ș/g, 's')
-        .replace(/ț/g, 't');
-    
-    const normalizedSearch = normalize(searchTerm);
-    
-    const matches = romanianCities.filter(city => {
-        const normalizedCity = normalize(city);
-        return normalizedCity.startsWith(normalizedSearch) || 
-               city.toLowerCase().startsWith(searchTerm);
-    });
-    
-    if (matches.length > 0) {
-        suggestionsDiv.innerHTML = matches
-            .slice(0, 5)
-            .map(city => `<div class="suggestion-item">${city}</div>`)
-            .join('');
-        suggestionsDiv.classList.add('active');
-    } else {
-        suggestionsDiv.innerHTML = '';
-        suggestionsDiv.classList.remove('active');
-    }
+.weather-card {
+  width: 360px;
+  background: var(--card);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.25);
+  position: relative;
 }
 
-// Event pentru input - sugestii
-cityInput.addEventListener('input', (e) => {
-    filterCities(e.target.value);
-    
-    // Reactiveaza butonul cand scrii din nou
-    if (e.target.value) {
-        searchBtn.disabled = false;
-        searchBtn.classList.remove('disabled');
-    }
-});
+#theme-toggle {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
 
-// Event pentru click pe sugestie
-suggestionsDiv.addEventListener('click', (e) => {
-    if (e.target.classList.contains('suggestion-item')) {
-        cityInput.value = e.target.textContent;
-        suggestionsDiv.innerHTML = '';
-        suggestionsDiv.classList.remove('active');
-        checkWeather(e.target.textContent);
-        
-        // Dezactiveaza butonul cauta
-        searchBtn.disabled = true;
-        searchBtn.classList.add('disabled');
-    }
-});
+.search-container {
+  position: relative;
+  margin-bottom: 15px;
+}
 
-// Inchide sugestiile cand dai click in afara
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.search-container')) {
-        suggestionsDiv.innerHTML = '';
-        suggestionsDiv.classList.remove('active');
-    }
-});
+#city-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
 
-// Event pentru Enter key
-cityInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && cityInput.value) {
-        suggestionsDiv.innerHTML = '';
-        suggestionsDiv.classList.remove('active');
-        checkWeather(cityInput.value);
-    }
-});
+.suggestions {
+  position: absolute;
+  width: 100%;
+  background: var(--card);
+  margin-top: 5px;
+  border-radius: 10px;
+  display: none;
+}
 
-// Events
-searchBtn.addEventListener('click', () => {
-    if (cityInput.value) {
-        suggestionsDiv.innerHTML = '';
-        suggestionsDiv.classList.remove('active');
-        checkWeather(cityInput.value);
-    }
-});
+.suggestions.active {
+  display: block;
+}
 
-locateBtn.addEventListener('click', getLocalWeather);
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
 
-// Pornim cu locatia automata la inceput
-window.onload = getLocalWeather;
+.suggestion-item:hover {
+  background: rgba(0,0,0,.1);
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+button {
+  flex: 1;
+  padding: 10px;
+  background: var(--btn);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.info {
+  text-align: center;
+}
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+#weather-icon {
+  width: 60px;
+}
+
+#temp {
+  font-size: 36px;
+}
+
+#map-container {
+  margin-top: 15px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+#google-map {
+  width: 100%;
+  height: 220px;
+  border: 0;
+}
