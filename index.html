@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Weather App</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,7 +27,7 @@
 
     <div class="button-group">
       <button id="search-btn">Caută</button>
-      <button id="locate-btn">Locația Mea</button>
+      <button id="locate-btn">Locația mea</button>
     </div>
 
     <div class="info">
@@ -35,8 +39,11 @@
       </div>
 
       <p id="desc">—</p>
-      <p>💧 Umiditate: <span id="humidity">—</span></p>
-      <p>💨 Vânt: <span id="wind">—</span></p>
+
+      <div class="details">
+        <p>💧 <span id="humidity">—</span></p>
+        <p>💨 <span id="wind">—</span></p>
+      </div>
 
       <div id="map-container">
         <iframe id="google-map"></iframe>
