@@ -1,41 +1,50 @@
 <!DOCTYPE html>
 <html lang="ro">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SkyCast</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" type="image/png" href="favicon.png" />
-  </head>
-  <body>
-    <div class="weather-card">
-      <div class="search-container">
-        <input type="text" id="city-input" placeholder="Cauta orasul..." autocomplete="off" />
-        <div id="suggestions" class="suggestions"></div>
-      </div>
-      
-      <button id="search-btn">Cauta</button>
-      <button id="locate-btn">Locatia Mea</button>
+<head>
+  <meta charset="UTF-8">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-      <div class="info">
-        <h1 id="city-name">--</h1>
-        <p id="desc">Asteptare...</p>
-        <h2 id="temp">--°C</h2>
-        <p>Umiditate: <span id="humidity">--</span></p>
-        <p>Vant: <span id="wind">--</span></p>
-        <div id="map-container" style="margin-top: 20px">
-          <iframe
-            id="google-map"
-            width="100%"
-            height="250"
-            style="border: 0; border-radius: 15px"
-            src="about:blank"
-          >
-          </iframe>
-        </div>
+  <div class="weather-card">
+
+    <button id="theme-toggle">🌙</button>
+
+    <div class="search-container">
+      <input
+        type="text"
+        id="city-input"
+        placeholder="Caută orașul"
+        autocomplete="off"
+      >
+      <div id="suggestions" class="suggestions"></div>
+    </div>
+
+    <div class="button-group">
+      <button id="search-btn">Caută</button>
+      <button id="locate-btn">Locația Mea</button>
+    </div>
+
+    <div class="info">
+      <h1 id="city-name">—</h1>
+
+      <div class="weather-main">
+        <img id="weather-icon">
+        <h2 id="temp">—°C</h2>
+      </div>
+
+      <p id="desc">—</p>
+      <p>💧 Umiditate: <span id="humidity">—</span></p>
+      <p>💨 Vânt: <span id="wind">—</span></p>
+
+      <div id="map-container">
+        <iframe id="google-map"></iframe>
       </div>
     </div>
 
-    <script src="script.js"></script>
-  </body>
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>
